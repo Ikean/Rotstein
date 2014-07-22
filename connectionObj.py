@@ -27,8 +27,8 @@ class Connection(clickObj):
 		self.creatingConn = True
 
 	def clickEnd(self):
-		print("connection click end")
 		if(self.creatingConn):
+			print("connection click end")
 			self.creatingConn = False
 
 	def render(self, pGX, pGY):

@@ -11,71 +11,72 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (200,40)
 pygame.init()
 fpsClock = pygame.time.Clock()
 
-windowSurfaceObj = pygame.display.set_mode((1280,960),HWSURFACE|DOUBLEBUF) #|RESIZEABLE
-pygame.display.set_caption('Rotstein')
+class MasterMngr(object):
+	def __init__(self):
+		self.windowSurfaceObj = pygame.display.set_mode((1280,960),HWSURFACE|DOUBLEBUF) #|RESIZEABLE
+		pygame.display.set_caption('Rotstein')
 
-mouseX, mouseY = 0, 0
-globalX, globalY = 0, 0
-middlePressed = False
-mmDistX, mmDistY = 0, 0
-leftPressed = False
-rightPressed = False
+		self.mouseX, self.mouseY = 0, 0
+		self.globalX, self.globalY = 0, 0
+		self.middlePressed = False
+		self.mmDistX, self.mmDistY = 0, 0
+		self.leftPressed = False
+		self.rightPressed = False
 
-whiteColor = pygame.Color(255, 255, 255)
-redColor = pygame.Color(255, 0, 0)
-brightGreyColor = pygame.Color(57, 57, 57)
+		self.whiteColor = pygame.Color(255, 255, 255)
+		self.redColor = pygame.Color(255, 0, 0)
+		self.brightGreyColor = pygame.Color(57, 57, 57)
 
-fontObj = pygame.font.Font('BebasNeue.otf', 21)
+		self.fontObj = pygame.font.Font('BebasNeue.otf', 21)
 
-bgRender = renderBackground.bgRenderer(windowSurfaceObj)
+		self.bgRender = renderBackground.bgRenderer(self.windowSurfaceObj)
 
-rElements = []
+		self.rElements = []
+		
+		self.mouseTarget = None
 
-global mouseTarget
-mouseTarget = None
+		self.rElements.append(Exec(self.windowSurfaceObj, self.rElements))
 
-rElements.append(Exec(windowSurfaceObj, rElements))
-
-#statischen elemente wie knoepfe initisialisieren
+		#statischen elemente wie knoepfe initisialisieren
 
 
-def update():
-	global mouseTarget
-	for ele in rElements:
-		if(ele.update(globalX, globalY, mouseX, mouseY)):
-			mouseTarget = ele
-			return
-	mouseTarget = None
+	def update(self):		
+		for ele in self.rElements:
+			if(ele.update(self.globalX, self.globalY, self.mouseX, self.mouseY)):
+				self.mouseTarget = ele
+				return
+		self.mouseTarget = None
 
-def renderFPS():
-	fpsMsg = fontObj.render(str(fpsClock.get_fps())[0:5] + " FPS", True, redColor)
-	windowSurfaceObj.blit(fpsMsg, (4,4))
+	def renderFPS(self):
+		fpsMsg = self.fontObj.render(str(fpsClock.get_fps())[0:5] + " FPS", True, self.redColor)
+		self.windowSurfaceObj.blit(fpsMsg, (4,4))
 
-	gCoordMsg = fontObj.render("gX: " + str(globalX) + " gY: " + str(globalY), True, redColor)
-	windowSurfaceObj.blit(gCoordMsg, (4, 24))
+		gCoordMsg = self.fontObj.render("gX: " + str(self.globalX) + " gY: " + str(self.globalY), True, self.redColor)
+		self.windowSurfaceObj.blit(gCoordMsg, (4, 24))
 
-	mCoordMsg = fontObj.render("mx: " + str(mouseX) + " my: " + str(mouseY), True, redColor)
-	windowSurfaceObj.blit(mCoordMsg, (4, 48))
+		mCoordMsg = self.fontObj.render("mx: " + str(self.mouseX) + " my: " + str(self.mouseY), True,self. redColor)
+		self.windowSurfaceObj.blit(mCoordMsg, (4, 48))
 
-	pygame.draw.circle(windowSurfaceObj, whiteColor, (globalX, globalY) , 5, 0)
+		pygame.draw.circle(self.windowSurfaceObj, self.whiteColor, (self.globalX, self.globalY) , 5, 0)
 
-	pygame.display.update()
+		pygame.display.update()
 
-def render():
-	#hintergrund	
-	bgRender.renderBackground(globalX, globalY)	
-	#elemente
-	for ele in reversed(rElements):
-		ele.render(globalX, globalY)
-	#std info
+	def render(self):
+		#hintergrund	
+		self.bgRender.renderBackground(self.globalX, self.globalY)	
+		#elemente
+		for ele in reversed(self.rElements):
+			ele.render(self.globalX, self.globalY)
+		#std info
 
-	renderFPS()
-	pygame.display.update()
+		self.renderFPS()
+		pygame.display.update()
 
+rot = MasterMngr()
 
 while True:
-	update()
-	render()
+	rot.update()
+	rot.render()
 	
 
 
@@ -84,41 +85,41 @@ while True:
 			pygame.quit()
 			sys.exit()
 		elif event.type == MOUSEMOTION:
-			mouseX, mouseY = event.pos			
-			if(middlePressed):
-				globalX = mouseX - mmDistX
-				globalY = mouseY - mmDistY
-			if(leftPressed):
-				if(mouseTarget):
-					mouseTarget.move(mouseX - mmDistX, mouseY - mmDistY)
+			rot.mouseX, rot.mouseY = event.pos			
+			if(rot.middlePressed):
+				rot.globalX = rot.mouseX - rot.mmDistX
+				rot.globalY = rot.mouseY - rot.mmDistY
+			if(rot.leftPressed):
+				if(rot.mouseTarget):
+					rot.mouseTarget.move(rot.mouseX - rot.mmDistX, rot.mouseY - rot.mmDistY)
 
 		elif event.type == MOUSEBUTTONDOWN: #maus runter
-			mouseX, mouseY = event.pos
+			rot.mouseX, rot.mouseY = event.pos
 			if event.button == 2:
 				pygame.mouse.set_cursor(*pygame.cursors.diamond)
-				middlePressed = True
-				mmDistX = mouseX - globalX
-				mmDistY = mouseY - globalY
+				rot.middlePressed = True
+				rot.mmDistX = rot.mouseX - rot.globalX
+				rot.mmDistY = rot.mouseY - rot.globalY
 			elif event.button == 1:
-				if(mouseTarget):
-					mmDistX = mouseX - mouseTarget.getX()
-					mmDistY = mouseY - mouseTarget.getY()
-					mouseTarget.click()
-					leftPressed = True
+				if(rot.mouseTarget):
+					rot.mmDistX = rot.mouseX - rot.mouseTarget.getX()
+					rot.mmDistY = rot.mouseY - rot.mouseTarget.getY()
+					rot.mouseTarget.click()
+					rot.leftPressed = True
 
 		elif event.type == MOUSEBUTTONUP: #maus hoch
-			mouseX, mouseY = event.pos
+			rot.mouseX, rot.mouseY = event.pos
 			if event.button == 2:
 				pygame.mouse.set_cursor(*pygame.cursors.arrow)
-				middlePressed = False
+				rot.middlePressed = False
 			elif event.button == 1:
-				leftPressed = False
-				for ele in rElements:
+				rot.leftPressed = False
+				for ele in rot.rElements:
 					ele.clickEnd()
 			elif event.button == 2:
-				rightPressed = False
+				rot.rightPressed = False
 			elif event.button == 3:
-				print(rElements)
+				print(rot.rElements)
 
 		elif event.type == KEYDOWN:
 			if event.key == K_ESCAPE:

@@ -27,8 +27,6 @@ brightGreyColor = pygame.Color(57, 57, 57)
 
 fontObj = pygame.font.Font('BebasNeue.otf', 21)
 
-imgExe = pygame.image.load('assets/cmd_.png')
-
 bgRender = renderBackground.bgRenderer(windowSurfaceObj)
 
 statElements = []
@@ -37,7 +35,7 @@ dynaElements = []
 global mouseTarget
 mouseTarget = None
 
-dynaElements.append(Exec(windowSurfaceObj, imgExe))
+dynaElements.append(Exec(windowSurfaceObj))
 
 def initStatElements():
 	#statElements.append()
@@ -46,7 +44,7 @@ def initStatElements():
 def hover():
 	global mouseTarget
 	for ele in dynaElements:
-		if(ele.checkForHover(globalX, globalY, mouseX, mouseY)):
+		if(ele.update(globalX, globalY, mouseX, mouseY)):
 			mouseTarget = ele
 			return
 	mouseTarget = None

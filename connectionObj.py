@@ -5,7 +5,33 @@ from pygame.locals import *
 from clickObj import clickObj
 
 class Connection(clickObj):	
-	def __init__(self, pWindowSurfaceObject):
+	def __init__(self, pWindowSurfaceObject, pEleList):
+		print("Connection erstellt")
 		self.img = pygame.image.load('assets/connection.png')
-		super(Connection, self).__init__(pWindowSurfaceObject)
-		print("Connection erstellt")	
+		super(Connection, self).__init__(pWindowSurfaceObject, pEleList)
+
+		self.ax = 0 #additional x
+		self.ay = 100
+
+		self.creatingConn = False
+
+	def move(self, x, y):
+		pass
+
+	def customUpdate(self):
+		self.x = self.parent.getX() + self.ax
+		self.y = self.parent.getY() + self.ay
+
+	def click(self):
+		print("connection clicked")
+		self.creatingConn = True
+
+	def clickEnd(self):
+		print("connection click end")
+		if(self.creatingConn):
+			self.creatingConn = False
+
+	def render(self, pGX, pGY):
+		if(self.creatingConn):
+			pass
+		self.wso.blit(self.img, (self.x + pGX, self.y + pGY))

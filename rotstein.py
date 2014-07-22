@@ -29,33 +29,23 @@ fontObj = pygame.font.Font('BebasNeue.otf', 21)
 
 bgRender = renderBackground.bgRenderer(windowSurfaceObj)
 
-statElements = []
-dynaElements = []
+rElements = []
 
 global mouseTarget
 mouseTarget = None
 
-dynaElements.append(Exec(windowSurfaceObj))
+rElements.append(Exec(windowSurfaceObj, rElements))
 
-def initStatElements():
-	#statElements.append()
-	pass
+#statischen elemente wie knoepfe initisialisieren
 
-def hover():
+
+def update():
 	global mouseTarget
-	for ele in dynaElements:
+	for ele in rElements:
 		if(ele.update(globalX, globalY, mouseX, mouseY)):
 			mouseTarget = ele
 			return
 	mouseTarget = None
-
-
-def render():	
-	#windowSurfaceObj.fill(brightGreyColor)
-	bgRender.renderBackground(globalX, globalY)	
-
-	for ele in dynaElements:
-		ele.render(globalX, globalY)
 
 def renderFPS():
 	fpsMsg = fontObj.render(str(fpsClock.get_fps())[0:5] + " FPS", True, redColor)
@@ -69,10 +59,25 @@ def renderFPS():
 
 	pygame.draw.circle(windowSurfaceObj, whiteColor, (globalX, globalY) , 5, 0)
 
+	pygame.display.update()
+
+def render():
+	#hintergrund	
+	bgRender.renderBackground(globalX, globalY)	
+	#elemente
+	for ele in reversed(rElements):
+		ele.render(globalX, globalY)
+	#std info
+
+	renderFPS()
+	pygame.display.update()
+
 
 while True:
-	hover()
+	update()
 	render()
+	
+
 
 	for event in pygame.event.get():
 		if event.type == QUIT:
@@ -108,13 +113,15 @@ while True:
 				middlePressed = False
 			elif event.button == 1:
 				leftPressed = False
+				for ele in rElements:
+					ele.clickEnd()
 			elif event.button == 2:
 				rightPressed = False
+			elif event.button == 3:
+				print(rElements)
 
 		elif event.type == KEYDOWN:
 			if event.key == K_ESCAPE:
 				pygame.event.post(pygame.event.Event(QUIT))
 
-	renderFPS()
-	pygame.display.update()
 	fpsClock.tick(60)	

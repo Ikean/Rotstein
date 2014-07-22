@@ -101,6 +101,7 @@ while True:
 				rot.mmDistX = rot.mouseX - rot.globalX
 				rot.mmDistY = rot.mouseY - rot.globalY
 			elif event.button == 1:
+				print("maus runter")
 				if(rot.mouseTarget):
 					rot.mmDistX = rot.mouseX - rot.mouseTarget.getX()
 					rot.mmDistY = rot.mouseY - rot.mouseTarget.getY()

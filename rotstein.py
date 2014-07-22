@@ -35,7 +35,7 @@ class MasterMngr(object):
 		
 		self.mouseTarget = None
 
-		self.rElements.append(Exec(self.windowSurfaceObj, self.rElements))
+		self.rElements.append(Exec(self))
 
 		#statischen elemente wie knoepfe initisialisieren
 

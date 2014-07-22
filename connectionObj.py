@@ -5,10 +5,10 @@ from pygame.locals import *
 from clickObj import clickObj
 
 class Connection(clickObj):	
-	def __init__(self, pWindowSurfaceObject, pEleList):
+	def __init__(self, pMaster):
 		print("Connection erstellt")
 		self.img = pygame.image.load('assets/connection.png')
-		super(Connection, self).__init__(pWindowSurfaceObject, pEleList)
+		super(Connection, self).__init__(pMaster)
 
 		self.ax = 0 #additional x
 		self.ay = 100

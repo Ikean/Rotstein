@@ -6,12 +6,12 @@ from clickObj import clickObj
 from connectionObj import Connection
 
 class Exec(clickObj):
-	def __init__(self, pWindowSurfaceObject, pEleList):
+	def __init__(self, pMaster):
 		print("Exec erstellt")
 		self.img = pygame.image.load('assets/cmd_.png')
-		super(Exec, self).__init__(pWindowSurfaceObject, pEleList)
+		super(Exec, self).__init__(pMaster)
 		self.collH = 36
-		inConnection = Connection(pWindowSurfaceObject, pEleList)
+		inConnection = Connection(pMaster)
 		inConnection.parent = self
 		self.rElements.append(inConnection)
 

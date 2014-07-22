@@ -3,9 +3,10 @@ import math
 from pygame.locals import *
 
 class clickObj(object):	#abstract class / no instance of this should ever be created!
-	def __init__(self, pWindowSurfaceObject, pEleList):
-		self.wso = pWindowSurfaceObject
-		self.rElements = pEleList
+	def __init__(self, pMaster):
+		self.master = pMaster
+		self.wso = pMaster.windowSurfaceObj
+		self.rElements = pMaster.rElements
 		self.hover = False
 		self.x = 0
 		self.y = 0

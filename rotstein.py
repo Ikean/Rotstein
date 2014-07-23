@@ -3,6 +3,7 @@ from pygame.locals import *
 import renderBackground
 #from clickObj import clickObj
 from execObj import Exec
+from buttonObj import Button
 import math
 #import rotMngr
 
@@ -36,10 +37,8 @@ class MasterMngr(object):
 		
 		self.mouseTarget = None
 
-		for appo in range(60):
-			self.rElements.append(Exec(self))
-
 		#statischen elemente wie knoepfe initisialisieren
+		self.rElements.append(Button(self))
 
 
 	def update(self):
@@ -51,11 +50,11 @@ class MasterMngr(object):
 		if(not self.leftPressed):
 			self.mouseTarget = None
 
-		if(self.slowMode == False):
-			if(fpsClock.get_fps() < 24.0):
-				if(pygame.time.get_ticks() > 3000):
-					self.slowMode = True
-					self.renderModeFaster()
+		# if(self.slowMode == False):
+		# 	if(fpsClock.get_fps() < 24.0):
+		# 		if(pygame.time.get_ticks() > 3000):
+		# 			self.slowMode = True
+		# 			self.renderModeFaster()
 
 
 	def renderFPS(self):
@@ -140,5 +139,8 @@ while True:
 		elif event.type == KEYDOWN:
 			if event.key == K_ESCAPE:
 				pygame.event.post(pygame.event.Event(QUIT))
+			elif event.key == K_x:
+				for ele in rot.rElements:
+					ele.deleteMe()
 
 	fpsClock.tick()	

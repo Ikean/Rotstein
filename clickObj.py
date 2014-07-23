@@ -42,6 +42,10 @@ class clickObj(object):	#abstract class / no instance of this should ever be cre
 	def renderModeFaster(self):
 		pass
 
+	def deleteMe(self):
+		if(self.hover):
+			self.master.rElements.remove(self)
+
 	def getX(self):
 		return self.x
 

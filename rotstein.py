@@ -1,7 +1,7 @@
 import pygame, sys, os
 from pygame.locals import *
 import renderBackground
-#from clickObj import clickObj
+from copy import deepcopy
 from execObj import Exec
 from buttonObj import Button
 import math
@@ -24,6 +24,7 @@ class MasterMngr(object):
 		self.leftPressed = False
 		self.rightPressed = False
 		self.slowMode = False
+		self.__recoverStates = []
 
 		self.whiteColor = pygame.Color(255, 255, 255)
 		self.redColor = pygame.Color(255, 0, 0)
@@ -56,6 +57,11 @@ class MasterMngr(object):
 		# 			self.slowMode = True
 		# 			self.renderModeFaster()
 
+	def createRecover(self): #for ctrl+z (undo)
+		self.__recoverStates.append(deepcopy(self.rElements))
+
+	def undo(self):
+		self.rElements = self.__recoverStates.pop(-1)
 
 	def renderFPS(self):
 		fpsMsg = self.fontObj.render(str(fpsClock.get_fps())[0:5] + " FPS", True, self.redColor)
@@ -115,7 +121,6 @@ while True:
 				rot.mmDistX = rot.mouseX - rot.globalX
 				rot.mmDistY = rot.mouseY - rot.globalY
 			elif event.button == 1:
-				print("maus runter")
 				if(rot.mouseTarget):
 					rot.mmDistX = rot.mouseX - rot.mouseTarget.getX()
 					rot.mmDistY = rot.mouseY - rot.mouseTarget.getY()
@@ -135,12 +140,13 @@ while True:
 				rot.rightPressed = False
 			elif event.button == 3:
 				print(rot.rElements)
+				print(sys.getsizeof(rot.rElements))
 
 		elif event.type == KEYDOWN:
 			if event.key == K_ESCAPE:
 				pygame.event.post(pygame.event.Event(QUIT))
 			elif event.key == K_x:
 				for ele in rot.rElements:
-					ele.deleteMe()
+					ele.delete()
 
 	fpsClock.tick()	

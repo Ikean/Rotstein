@@ -42,9 +42,17 @@ class clickObj(object):	#abstract class / no instance of this should ever be cre
 	def renderModeFaster(self):
 		pass
 
-	def deleteMe(self):
+	def delete(self):
 		if(self.hover):
+			for ele in self.master.rElements:
+				if ele.parent == self:
+					if(ele.type):
+						ele.connectedTo.connectedTo = None
+						ele.connectedTo.renderConnection = True
+					self.master.rElements.remove(ele)
+
 			self.master.rElements.remove(self)
+
 
 	def getX(self):
 		return self.x
@@ -58,7 +66,7 @@ class clickObj(object):	#abstract class / no instance of this should ever be cre
 	def clickEnd(self):
 		pass
 
-	def customUpdate(self): #overridden by classes which need additional logic
+	def customUpdate(self): #overwritten by classes which need additional logic
 		pass
 
 	def update(self, pGX, pGY, pMX, pMY): #figures out if mouse is hovering over it

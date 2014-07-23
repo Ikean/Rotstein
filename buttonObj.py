@@ -10,7 +10,7 @@ class Button(clickObj):
 	def __init__(self,pMaster):
 		self.img = pygame.image.load('assets/button.png')
 		self.img = self.img.convert_alpha()
-
+		self.name = "button"
 		self.imgp = pygame.image.load('assets/buttonPressed.png')
 		self.imgp = self.imgp.convert_alpha()
 		super(Button, self).__init__(pMaster)
@@ -28,13 +28,12 @@ class Button(clickObj):
 			self.wso.blit(self.img, (self.x, self.y))
 
 	def click(self):
-		print("click button")
 		ele = Exec(self.master)
-		#ele.x = self.master.globalX
-		#ele.y = self.master.globalY
+		ele.x = -self.master.globalX+self.wso.get_width()/2-100
+		ele.y = -self.master.globalY+self.wso.get_height()/2-100
 		self.master.rElements.append(ele)
 
-	def deleteMe(self):
+	def delete(self):
 		pass #buttons cant be deleted
 
 	def update(self, pGX, pGY, pMX, pMY): #figures out if mouse is hovering over it

@@ -7,6 +7,7 @@ class bgRenderer(object):
 	def __init__(self, pWindowSurfaceObj):
 		self.windowSurfaceObj = pWindowSurfaceObj
 		self.bgImg = pygame.image.load('assets/bg.png')
+		self.bgImg = self.bgImg.convert()
 
 		self.bgih = self.bgImg.get_height()
 		self.bgiw = self.bgImg.get_width()

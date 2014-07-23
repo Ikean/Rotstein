@@ -22,6 +22,7 @@ class MasterMngr(object):
 		self.mmDistX, self.mmDistY = 0, 0
 		self.leftPressed = False
 		self.rightPressed = False
+		self.slowMode = False
 
 		self.whiteColor = pygame.Color(255, 255, 255)
 		self.redColor = pygame.Color(255, 0, 0)
@@ -35,18 +36,27 @@ class MasterMngr(object):
 		
 		self.mouseTarget = None
 
-		self.rElements.append(Exec(self))
-		self.rElements.append(Exec(self))
+		for appo in range(60):
+			self.rElements.append(Exec(self))
 
 		#statischen elemente wie knoepfe initisialisieren
 
 
-	def update(self):		
+	def update(self):
 		for ele in self.rElements:
 			if(ele.update(self.globalX, self.globalY, self.mouseX, self.mouseY)):
-				self.mouseTarget = ele
-				return
-		self.mouseTarget = None
+				if(not self.leftPressed):
+					self.mouseTarget = ele
+					return
+		if(not self.leftPressed):
+			self.mouseTarget = None
+
+		if(self.slowMode == False):
+			if(fpsClock.get_fps() < 24.0):
+				if(pygame.time.get_ticks() > 3000):
+					self.slowMode = True
+					self.renderModeFaster()
+
 
 	def renderFPS(self):
 		fpsMsg = self.fontObj.render(str(fpsClock.get_fps())[0:5] + " FPS", True, self.redColor)
@@ -72,6 +82,10 @@ class MasterMngr(object):
 
 		self.renderFPS()
 		pygame.display.update()
+
+	def renderModeFaster(self):
+		for obj in self.rElements:
+			obj.renderModeFaster()
 
 rot = MasterMngr()
 
@@ -127,4 +141,4 @@ while True:
 			if event.key == K_ESCAPE:
 				pygame.event.post(pygame.event.Event(QUIT))
 
-	fpsClock.tick(60)	
+	fpsClock.tick()	

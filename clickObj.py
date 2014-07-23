@@ -39,6 +39,9 @@ class clickObj(object):	#abstract class / no instance of this should ever be cre
 		self.x = x
 		self.y = y
 
+	def renderModeFaster(self):
+		pass
+
 	def getX(self):
 		return self.x
 

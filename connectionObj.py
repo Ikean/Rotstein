@@ -13,7 +13,7 @@ class Connection(clickObj):
 		self.parent = parent
 		self.hoverImg = pygame.image.load('assets/connectionHover.png')
 		self.hoverImg = self.hoverImg.convert_alpha()
-		self.type = 'none'
+		self.type = 'connIn'
 		self.ax = ax #additional x
 		self.ay = ay
 
@@ -32,19 +32,27 @@ class Connection(clickObj):
 
 	def click(self):
 		print("connection clicked")
-		self.creatingConn = True
+		if(self.connectedTo):
+			self.connectedTo.creatingConn = True
+			self.connectedTo.renderConnection = True
+			self.connectedTo.connectedTo = None
+			self.connectedTo = None
+			self.renderConnection = True			
+		else:
+			self.creatingConn = True
 
 	def clickEnd(self):
 		if(self.creatingConn):
 			print("connection click end")
 			self.creatingConn = False
 			for ele in self.master.rElements:
-				if(ele.hover):
-					if(ele != self):
-						if(ele.type):
-							self.connectedTo = ele
-							ele.connectedTo = self
-							ele.renderConnection = False
+				if(ele.hover): #must hover over it
+					if(ele.parent != self.parent): #cant connect to own in/outs					
+						if(ele.type == 'connIn' or ele.type == 'connOut'): #cant connect to none connection objects
+							if(ele.type != self.type): #cant connect input to output or vice versa
+								self.connectedTo = ele
+								ele.connectedTo = self
+								ele.renderConnection = False
 
 
 	def drange(self, start, stop, step):
@@ -69,7 +77,7 @@ class Connection(clickObj):
 		letzter_x=erster_x
 		letzter_y=erster_y
 	
-		for u in self.drange(0, 1, 0.01):
+		for u in self.drange(0, 1.01, 0.01):
 			posx=pow(u,3)*(vierter_x+3*(zweiter_x-dritter_x)-erster_x)+3*pow(u,2)*(erster_x-2*zweiter_x+dritter_x)+3*u*(zweiter_x-erster_x)+erster_x
 			posy=pow(u,3)*(vierter_y+3*(zweiter_y-dritter_y)-erster_y)+3*pow(u,2)*(erster_y-2*zweiter_y+dritter_y)+3*u*(zweiter_y-erster_y)+erster_y
 			pygame.draw.line(self.wso, (255, 255, 255), (letzter_x, letzter_y), (posx, posy), 2)
@@ -85,4 +93,4 @@ class Connection(clickObj):
 		if(self.hover):
 			self.wso.blit(self.hoverImg, (self.x + pGX, self.y + pGY))
 		if(self.connectedTo and self.renderConnection):
-			self.drawBerzier(self.connectedTo.x+6, self.connectedTo.y+6)
+			self.drawBerzier(self.connectedTo.x+6+pGX, self.connectedTo.y+6+pGY)

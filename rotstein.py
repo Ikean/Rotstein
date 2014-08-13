@@ -38,11 +38,15 @@ class MasterMngr(object):
 		
 		self.mouseTarget = None
 
+		self.addDrei = fpsClock.get_fps()/30.0
+		self.dreiF = 0
+
 		#statischen elemente wie knoepfe initisialisieren
 		self.rElements.append(Button(self))
 
 
 	def update(self):
+
 		for ele in self.rElements:
 			if(ele.update(self.globalX, self.globalY, self.mouseX, self.mouseY)):
 				if(not self.leftPressed):
@@ -79,7 +83,8 @@ class MasterMngr(object):
 
 	def render(self):
 		#hintergrund	
-		self.bgRender.renderBackground(self.globalX, self.globalY)	
+		#self.bgRender.renderBackground(self.globalX, self.globalY)	
+		self.windowSurfaceObj.fill(self.whiteColor)
 		#elemente
 		for ele in reversed(self.rElements):
 			ele.render(self.globalX, self.globalY)
@@ -141,6 +146,7 @@ while True:
 			elif event.button == 3:
 				print(rot.rElements)
 				print(sys.getsizeof(rot.rElements))
+				print(fpsClock.get_fps())
 
 		elif event.type == KEYDOWN:
 			if event.key == K_ESCAPE:

@@ -16,6 +16,7 @@ class Button(clickObj):
 		super(Button, self).__init__(pMaster)
 		self.x = 300
 		self.y = 10
+		self.type = 'button'
 
 	def move(self, x, y):
 		pass

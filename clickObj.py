@@ -13,14 +13,22 @@ class clickObj(object):	#abstract class / no instance of this should ever be cre
 
 		self.ih = self.img.get_height()
 		self.iw = self.img.get_width()
+		self.wsoh = self.wso.get_height()
+		self.wsow = self.wso.get_width()
 		self.collH = self.ih #some objects need a custom collision box
 		self.collW = self.iw #they will override this attribute
 
+		self.type = 'empty'
 		self.parent = None
 
 		self.orangeColor = pygame.Color(225, 102, 0)
 
 	def render(self, pGX, pGY):
+		if (pGX + self.x + self.iw < 0 or
+	 		pGX + self.x > self.wsow or
+		 	pGY + self.y + self.ih < 0 or
+			pGY + self.y > self.wsoh):			
+			return
 		if(self.hover):
 			self.hoverBorder(pGX, pGY)
 		self.wso.blit(self.img, (self.x + pGX, self.y + pGY))
@@ -45,8 +53,8 @@ class clickObj(object):	#abstract class / no instance of this should ever be cre
 	def delete(self):
 		if(self.hover):
 			for ele in self.master.rElements:
-				if ele.parent == self:
-					if(ele.type):
+				if ele.parent == self: #alle obj die das hover element haben auch loeschen
+					if(hasattr(ele, "type")):
 						ele.connectedTo.connectedTo = None
 						ele.connectedTo.renderConnection = True
 					self.master.rElements.remove(ele)

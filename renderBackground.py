@@ -14,7 +14,7 @@ class bgRenderer(object):
 		self.wsh = 0
 		self.wsw = 0
 
-		self.tileRepeat = 16
+		self.tileRepeat = 11
 		
 		self.x = 0 #-self.tileRepeat*self.bgiw/2
 		self.y = 0 #-self.tileRepeat*self.bgih/2
@@ -38,16 +38,16 @@ class bgRenderer(object):
 	def renderBackground(self,pX,pY):
 		if(self.x + pX > 0):
 			#print("collision left")
-			self.x-=self.bgiw*2
+			self.x-=self.bgiw
 		elif(self.x + pX + self.bgw < self.wsw):
 			#print("collision right")
-			self.x+=self.bgiw*2
+			self.x+=self.bgiw
 		if(self.y + pY > 0):
 			#print("collision up")
-			self.y-=self.bgih*2
+			self.y-=self.bgih
 		elif(self.y + pY + self.bgh < self.wsh):
 			#print("collision down")
-			self.y+=self.bgih*2
+			self.y+=self.bgih
 
 		self.windowSurfaceObj.blit(self.bg, (self.x + pX, self.y + pY))
 

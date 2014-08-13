@@ -18,12 +18,12 @@ class Exec(clickObj):
 		self.collH = 36
 		inConnection = Connection(pMaster, self, 0, 100)		
 		inConnection.name = "inputExec"
-		inConnection.type = 'in'
+		inConnection.type = 'connIn'
 		self.rElements.append(inConnection)
 
 		outConnection = Connection(pMaster, self, 235, 100)		
 		outConnection.name = "outputExec"
-		outConnection.type = 'out'
+		outConnection.type = 'connOut'
 		self.rElements.append(outConnection)
 
 	def renderModeFaster(self):

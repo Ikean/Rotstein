@@ -20,6 +20,7 @@ class clickObj(object):	#abstract class / no instance of this should ever be cre
 
 		self.type = 'empty'
 		self.parent = None
+		self.children = []
 
 		self.orangeColor = pygame.Color(225, 102, 0)
 
@@ -42,6 +43,9 @@ class clickObj(object):	#abstract class / no instance of this should ever be cre
 		pygame.draw.line(self.wso, self.orangeColor, (a,d), (c,d), 3)
 		pygame.draw.line(self.wso, self.orangeColor, (c,d), (c,b), 3)
 		pygame.draw.line(self.wso, self.orangeColor, (a,b), (c,b), 3)
+	
+	def __repr__(self):
+		return "\n(x: " + str(self.x) + " y: " + str(self.y) + " type: " + str(self.type) +")"
 
 	def move(self, x, y):
 		self.x = x
@@ -52,14 +56,18 @@ class clickObj(object):	#abstract class / no instance of this should ever be cre
 
 	def delete(self):
 		if(self.hover):
-			for ele in self.master.rElements:
-				if ele.parent == self: #alle obj die das hover element haben auch loeschen
-					if(hasattr(ele, "type")):
+			for ele in self.children:
+				if(ele.type == 'connIn' or ele.type == 'connOut'):
+					try:
 						ele.connectedTo.connectedTo = None
 						ele.connectedTo.renderConnection = True
-					self.master.rElements.remove(ele)
-
-			self.master.rElements.remove(self)
+					except Exception:
+						pass
+				ele.fDelete()
+			self.fDelete()
+			
+	def fDelete(self):
+		self.master.rElements.remove(self)
 
 
 	def getX(self):

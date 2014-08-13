@@ -16,15 +16,18 @@ class Exec(clickObj):
 		self.img.blit(titleImg, (50,7))
 		super(Exec, self).__init__(pMaster)
 		self.collH = 36
+		self.type = "exec"
 		inConnection = Connection(pMaster, self, 0, 100)		
 		inConnection.name = "inputExec"
 		inConnection.type = 'connIn'
 		self.rElements.append(inConnection)
+		self.children.append(inConnection)
 
 		outConnection = Connection(pMaster, self, 235, 100)		
 		outConnection.name = "outputExec"
 		outConnection.type = 'connOut'
 		self.rElements.append(outConnection)
+		self.children.append(outConnection)
 
 	def renderModeFaster(self):
 		self.img = pygame.image.load('assets/cmd_.png')

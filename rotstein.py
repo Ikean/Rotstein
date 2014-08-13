@@ -83,8 +83,8 @@ class MasterMngr(object):
 
 	def render(self):
 		#hintergrund	
-		#self.bgRender.renderBackground(self.globalX, self.globalY)	
-		self.windowSurfaceObj.fill(self.whiteColor)
+		self.bgRender.renderBackground(self.globalX, self.globalY)	
+		#self.windowSurfaceObj.fill(self.whiteColor)
 		#elemente
 		for ele in reversed(self.rElements):
 			ele.render(self.globalX, self.globalY)

@@ -1,7 +1,5 @@
 '''
-Created on 14.08.2014
-
-@author: Hannez
+@author: Hannez/Ikean
 '''
 import pygame
 from connectionObj import Connection

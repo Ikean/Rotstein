@@ -1,3 +1,7 @@
+'''
+@author: Hannez/Ikean
+'''
+
 import pygame, sys, os
 from pygame.locals import *
 import renderBackground
@@ -11,6 +15,7 @@ import math
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (200,40)
 
 pygame.init()
+pygame.display.set_icon(pygame.image.load('assets/icon.png'))
 fpsClock = pygame.time.Clock()
 
 class MasterMngr(object):

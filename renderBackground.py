@@ -1,3 +1,7 @@
+'''
+@author: Hannez/Ikean
+'''
+
 import pygame
 import math
 from pygame.locals import *

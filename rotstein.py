@@ -4,6 +4,7 @@ import renderBackground
 from copy import deepcopy
 from execObj import Exec
 from buttonObj import Button
+from callObj import CallObj
 import math
 #import rotMngr
 
@@ -15,10 +16,10 @@ fpsClock = pygame.time.Clock()
 class MasterMngr(object):
 	def __init__(self):
 		self.windowSurfaceObj = pygame.display.set_mode((1280,960),HWSURFACE|DOUBLEBUF) #|RESIZEABLE
-		pygame.display.set_caption('Rotstein')
+		pygame.display.set_caption('Rotstein - by Ikean <nelion2@web.de>')
 
 		self.mouseX, self.mouseY = 0, 0
-		self.globalX, self.globalY = 0, 0
+		self.globalX, self.globalY = 200, 100
 		self.middlePressed = False
 		self.mmDistX, self.mmDistY = 0, 0
 		self.leftPressed = False
@@ -31,10 +32,11 @@ class MasterMngr(object):
 		self.brightGreyColor = pygame.Color(57, 57, 57)
 
 		self.fontObj = pygame.font.Font('BebasNeue.otf', 21)
+		
+		self.rElements = []
 
 		self.bgRender = renderBackground.bgRenderer(self.windowSurfaceObj)
-
-		self.rElements = []
+		self.caller = CallObj(self)
 		
 		self.mouseTarget = None
 
@@ -54,6 +56,8 @@ class MasterMngr(object):
 					return
 		if(not self.leftPressed):
 			self.mouseTarget = None
+			
+		self.caller.update()
 
 		# if(self.slowMode == False):
 		# 	if(fpsClock.get_fps() < 24.0):
@@ -77,13 +81,13 @@ class MasterMngr(object):
 		mCoordMsg = self.fontObj.render("mx: " + str(self.mouseX) + " my: " + str(self.mouseY), True,self. redColor)
 		self.windowSurfaceObj.blit(mCoordMsg, (4, 48))
 
-		pygame.draw.circle(self.windowSurfaceObj, self.whiteColor, (self.globalX, self.globalY) , 5, 0)
 
 		pygame.display.update()
 
 	def render(self):
 		#hintergrund	
-		self.bgRender.renderBackground(self.globalX, self.globalY)	
+		self.bgRender.renderBackground(self.globalX, self.globalY)
+		self.caller.render(self.globalX, self.globalY)
 		#self.windowSurfaceObj.fill(self.whiteColor)
 		#elemente
 		for ele in reversed(self.rElements):
@@ -100,8 +104,6 @@ class MasterMngr(object):
 rot = MasterMngr()
 
 while True:
-	rot.update()
-	rot.render()
 	
 
 
@@ -110,6 +112,8 @@ while True:
 			pygame.quit()
 			sys.exit()
 		elif event.type == MOUSEMOTION:
+			rot.update()
+			rot.render()
 			rot.mouseX, rot.mouseY = event.pos			
 			if(rot.middlePressed):
 				rot.globalX = rot.mouseX - rot.mmDistX

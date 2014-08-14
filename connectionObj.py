@@ -14,8 +14,8 @@ class Connection(clickObj):
 		self.hoverImg = pygame.image.load('assets/connectionHover.png')
 		self.hoverImg = self.hoverImg.convert_alpha()
 		self.type = 'connIn'
-		self.ax = ax #additional x
-		self.ay = ay
+		self.ax = ax
+		self.ay = ay 
 
 		self.parent.img.blit(self.img, (self.ax, self.ay))
 
@@ -25,10 +25,12 @@ class Connection(clickObj):
 
 	def move(self, x, y):
 		pass
+	
 
 	def customUpdate(self):
 		self.x = self.parent.getX() + self.ax
 		self.y = self.parent.getY() + self.ay
+		
 
 	def click(self):
 		print("connection clicked")
@@ -47,9 +49,13 @@ class Connection(clickObj):
 			self.creatingConn = False
 			for ele in self.master.rElements:
 				if(ele.hover): #must hover over it
-					if(ele.parent != self.parent): #cant connect to own in/outs					
-						if(ele.type == 'connIn' or ele.type == 'connOut'): #cant connect to none connection objects
+					if(ele.parent != self.parent): #cant connect to own in/outs				
+						if(ele.type == 'connIn' or ele.type == 'connOut' or ele.type == 'callConn'): #cant connect to none connection objects
 							if(ele.type != self.type): #cant connect input to output or vice versa
+								print(ele.type)
+								if(ele.connectedTo is not None):
+									ele.connectedTo.renderConnection=True
+									ele.connectedTo.connectedTo = None #disconnect from myself
 								self.connectedTo = ele
 								ele.connectedTo = self
 								ele.renderConnection = False
@@ -64,7 +70,7 @@ class Connection(clickObj):
 	def drawBerzier(self, tx, ty):
 		l = math.fabs((self.x + self.master.globalX + self.iw/2) - (tx))
 		erster_x = self.x + self.master.globalX + self.iw/2
-		if(erster_x > self.parent.x + self.master.globalX + self.parent.iw/2):
+		if(erster_x > self.parent.getX() + self.master.globalX + self.parent.iw/2):
 			l = -l
 		erster_y = self.y + self.master.globalY + self.ih/2
 		zweiter_x = self.x + self.master.globalX + self.iw/2 - l
